@@ -1,9 +1,11 @@
 package com.example.kabdelbaki.nfcstatelogger;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.icu.text.SimpleDateFormat;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.os.Build;
@@ -11,6 +13,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class NfcStateHandler extends BroadcastReceiver {
 
@@ -53,6 +56,7 @@ public class NfcStateHandler extends BroadcastReceiver {
 
         BroadcastReceiver nfcListener = new BroadcastReceiver() {
 
+            @TargetApi(Build.VERSION_CODES.N)
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -64,22 +68,22 @@ public class NfcStateHandler extends BroadcastReceiver {
                             NfcAdapter.STATE_OFF);
                     switch (state) {
                         case NfcAdapter.STATE_OFF:
-                            nfcStateChangeMessages.add(MainActivity.storeNfcStateChange("NFC is off"));
+                            nfcStateChangeMessages.add(timeStampFormatter() + " " + MainActivity.storeNfcStateChange("NFC is off"));
                             Log.v(TAG, "NFC is off");
                             break;
                         case NfcAdapter.STATE_TURNING_OFF:
 
-                            nfcStateChangeMessages.add(MainActivity.storeNfcStateChange("NFC is turning off"));
+                            nfcStateChangeMessages.add(timeStampFormatter() + " " +MainActivity.storeNfcStateChange("NFC is turning off"));
                             Log.v(TAG, "NFC is turning off");
                             break;
                         case NfcAdapter.STATE_ON:
 
-                            nfcStateChangeMessages.add(MainActivity.storeNfcStateChange("NFC is on"));
+                            nfcStateChangeMessages.add(timeStampFormatter() + " " +MainActivity.storeNfcStateChange("NFC is on"));
                             Log.v(TAG, "NFC is on");
                             break;
                         case NfcAdapter.STATE_TURNING_ON:
 
-                            nfcStateChangeMessages.add(MainActivity.storeNfcStateChange("NFC is turning on"));
+                            nfcStateChangeMessages.add(timeStampFormatter() + " " +MainActivity.storeNfcStateChange("NFC is turning on"));
                             Log.v(TAG, "NFC is turning on");
                             break;
                     }
@@ -92,16 +96,15 @@ public class NfcStateHandler extends BroadcastReceiver {
         return nfcListener;
     }
 
-//    public String timeStampFormatter(){
-//
-//        SimpleDateFormat dayMonthYearFormat = new SimpleDateFormat("dd mm, yyyy");
-//        String timestamp = dayMonthYearFormat.toString();
-//
-//        return timestamp + " ";
-//
-//    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public String timeStampFormatter() {
+
+        String timeStamp = new SimpleDateFormat("HH:mm:ss MM/dd/yyyy").format(new Date());
 
 
+        return timeStamp + " ";
+
+    }
 
 
     public ArrayList<String> getNfcStateChangeMessages() {

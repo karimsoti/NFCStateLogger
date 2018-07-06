@@ -4,8 +4,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,16 +26,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.nfcStateHandler = new NfcStateHandler(this);
-        this.registerReceiver(this.nfcStateHandler.getNfcBroadcastListener(), nfcStateHandler.getFilter());
+        registerReceiver(this.nfcStateHandler.getNfcBroadcastListener(), nfcStateHandler.getFilter());
         this.setNfcLogArrayList(nfcStateHandler);
 //        this.nfcStateChangeUi(this.nfcLogArrayList);
 
-
+        ScrollView sv = (ScrollView) findViewById(R.id.scrollView);
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 nfcStateChangeUi(nfcLogArrayList);
+                nfcStateChangeUi(nfcLogArrayList);
             }
         });
 
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < nfcStateChangeList.size(); i++) {
             textView.append(nfcStateChangeList.get(i) + "\n");
         }
+        textView.setMovementMethod(new ScrollingMovementMethod());
 
         return textView;
     }
