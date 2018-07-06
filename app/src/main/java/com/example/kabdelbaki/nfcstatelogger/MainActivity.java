@@ -41,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+
+        this.nfcStateChangeUi(this.nfcLogArrayList);
+        super.onResume();
+    }
+
 
     public TextView nfcStateChangeUi(ArrayList<String> nfcStateChangeList) {
 
